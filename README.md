@@ -1,6 +1,6 @@
 # iow_sht7x - Node.js module for Sensirion SHT7X with IOW158A-S 
 
-This Node module is intented for use with the [Sensiron SHT7x](https://www.farnell.com/datasheets/1563784.pdf) sensor IC that is coupled with a Code Mercenaries IOW158A-S.
+This Node module is intended for use with a [Sensiron SHT7x](https://www.farnell.com/datasheets/1563784.pdf) sensor IC that is coupled with a Code Mercenaries IOW158A-S.
 
 ## Prerequisites
 * This module requires the installation of the [Code Mercenaries IO-Warrior SDK (Linux)](https://www.codemercs.com/downloads/iowarrior/IO-Warrior_SDK_linux.zip) version 1.7.
@@ -14,6 +14,15 @@ After downloading the IO-Warrior SDK, upzip into any folder and run the followin
 make
 sudo make install
 ```
+It is expected that the binaries and includes go into standard locations (`/usr/lib`, `/usr/include`)
+
+### Installing module from npm registry
+```
+npm install --save @devonho/iow_sht7x
+```
+
+### Installing module from source
+
 Installing within Node.js project
 
 ```

@@ -12,9 +12,9 @@ int main()
 	IOWSHT7x sht;
 
 	sht.open();
-
-	printf("%.2f deg. C\n", sht.read());
-	//printf("%.2f RH\n", sht.readTempHumidity());
+	sht.read();
+	printf("%.2f deg. C\n", sht.getTemperature());
+	printf("%.2f RH\n", sht.getHumidity());
 
 	sht.close(); 
 
