@@ -1,0 +1,17 @@
+{
+  "name": "iow_sht7x",
+  "version": "0.0.1",
+  "description": "Node.js module for reading Sensirion SHT7x temperature and humidity over Code Mercenaries IOW158A-S",
+  "author": "Your name goes here",
+  "license": "ISC",
+  "main": "iow_sht7x.js",
+  "private": true,
+  "gypfile": true,
+  "dependencies": {
+    "bindings": "~1.2.1",
+    "node-addon-api": "^1.0.0"
+  },
+  "scripts": {
+    "test": "node --napi-modules ./test/iow_sht7x.js"
+  }
+}
