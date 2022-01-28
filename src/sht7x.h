@@ -1,10 +1,12 @@
 #include "iowkit.h"
+#include <string>
 
 class IOWSHT7x
 {
     double _temperature;
     double _humidity;
     double _dewpoint;
+    std::string  _last_error_msg;
 
     IOWKIT_HANDLE _ioHandle;
 
@@ -19,5 +21,7 @@ public:
     bool read();
     double getTemperature();
     double getHumidity();
+
+    std::string get_last_error();
 
 };

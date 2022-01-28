@@ -44,32 +44,42 @@ bool IOWSHT7x::open()
 	}
 	catch(const std::exception& e)
 	{
+		_last_error_msg = std::string("open:") +  std::string(e.what());
 		return false;
-	}	
+	}
+	catch(const char* e)
+	{
+		_last_error_msg = std::string("open:") +  std::string(e);
+		return false;
+	}
 }
 
 void IOWSHT7x::close()
 {
 	try
 	{
-		if (_ioHandle == NULL) throw "ioHandle is NULL";		
+		if (_ioHandle != NULL)
+		{
+			IOWKIT_SPECIAL_REPORT report;
+			memset(&report, 0x00, IOWKIT_SPECIAL_REPORT_SIZE);
 
-		IOWKIT_SPECIAL_REPORT report;
-		memset(&report, 0x00, IOWKIT_SPECIAL_REPORT_SIZE);
+			report.ReportID = 0x01; //I2C-Mode
+			report.Bytes[0] = 0x00; //Disable
 
-		report.ReportID = 0x01; //I2C-Mode
-		report.Bytes[0] = 0x00; //Disable
+			IowKitWrite(_ioHandle, IOW_PIPE_SPECIAL_MODE, (char*)&report, IOWKIT_SPECIAL_REPORT_SIZE);
 
-		IowKitWrite(_ioHandle, IOW_PIPE_SPECIAL_MODE, (char*)&report, IOWKIT_SPECIAL_REPORT_SIZE);
-
-		IowKitCloseDevice(_ioHandle);	//close all IO-Warrior
-		_ioHandle = NULL;		
-
+			IowKitCloseDevice(_ioHandle);	//close all IO-Warrior
+			_ioHandle = NULL;		
+		}
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
-	}	
+		_last_error_msg = std::string("close:") +  std::string(e.what());
+	}
+	catch(const char* e)
+	{
+		_last_error_msg = std::string("close:") +  std::string(e);
+	}
 }
 
 bool IOWSHT7x::read()
@@ -87,7 +97,12 @@ bool IOWSHT7x::read()
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		_last_error_msg = std::string("read:") +  std::string(e.what());
+		return false;
+	}
+	catch(const char* e)
+	{
+		_last_error_msg = std::string("read:") +  std::string(e);
 		return false;
 	}
 }
@@ -101,9 +116,14 @@ double IOWSHT7x::getTemperature()
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		_last_error_msg = std::string("getTemperature:") +  std::string(e.what());
 		return 0.0;
-	}	
+	}
+	catch(const char* e)
+	{
+		_last_error_msg = std::string("getTemperature:") +  std::string(e);
+		return false;
+	}
 }
 
 double IOWSHT7x::getHumidity()
@@ -115,9 +135,14 @@ double IOWSHT7x::getHumidity()
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << e.what() << '\n';
+		_last_error_msg = std::string("getHumidity:") +  std::string(e.what());
 		return 0.0;
-	}		
+	}
+	catch(const char* e)
+	{
+		_last_error_msg = std::string("getHumidity:") +  std::string(e);
+		return false;
+	}
 }
 
 short IOWSHT7x::readI2C(UCHAR call)
@@ -143,9 +168,14 @@ short IOWSHT7x::readI2C(UCHAR call)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << "readI2C" << e.what() << '\n';
+		_last_error_msg = std::string("readI2C:") +  std::string(e.what());
 		return 0;
-	}	
+	}
+	catch(const char* e)
+	{
+		_last_error_msg = std::string("readI2C:") +  std::string(e);
+		return false;
+	}
 }
 
 bool IOWSHT7x::calc_trh(double humidity, double temperature)
@@ -179,9 +209,14 @@ bool IOWSHT7x::calc_trh(double humidity, double temperature)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << "calc_trh" << e.what() << '\n';
+		_last_error_msg = std::string("calc_trh:") +  std::string(e.what());
 		return false;
-	}		
+	}
+	catch(const char* e)
+	{
+		_last_error_msg = std::string("calc_trh:") +  std::string(e);
+		return false;
+	}
 }
 
 bool IOWSHT7x::calc_dewpoint(double h, double t)
@@ -197,8 +232,18 @@ bool IOWSHT7x::calc_dewpoint(double h, double t)
 	}
 	catch(const std::exception& e)
 	{
-		std::cerr << "calc_trh" << e.what() << '\n';
+		_last_error_msg = std::string("calc_dewpoint:") +  std::string(e.what());
 		return false;
-	}		
+	}
+	catch(const char* e)
+	{
+		_last_error_msg = std::string("calc_dewpoint:") +  std::string(e);
+		printf("calc_dewpoint: %s\n", e);
+		return false;
+	}
 }
 
+std::string IOWSHT7x::get_last_error()
+{
+	return _last_error_msg;
+}

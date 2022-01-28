@@ -7,7 +7,11 @@ This Node module is intended for use with a [Sensiron SHT7x](https://www.farnell
 
 ## Installation
 
-After downloading the IO-Warrior SDK, upzip into any folder and run the following:
+After downloading the IO-Warrior SDK, upzip into any folder and run the following in the root folder of the SDK:
+```
+sed -i 's/IOWKIT_PID_IOW24/IOWKIT_PID_IOW24_SENSI/' ./src/iowkit.c
+```
+Then trigger the build:
 
 ```
 ./configure

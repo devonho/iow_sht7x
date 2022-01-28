@@ -5,13 +5,19 @@
 
 Napi::Number MethodReadTemp(const Napi::CallbackInfo& info) {
   Napi::Env env = info.Env();
-
+  
   double value;
   IOWSHT7x sht;
-  sht.open();
-  sht.read();
-  value = sht.getTemperature();
-  sht.close();
+  if(sht.open() && sht.read())
+  {
+    value = sht.getTemperature();
+    sht.close();
+  }
+  else
+  {
+    sht.close();
+    throw Napi::Error::New(env, sht.get_last_error());
+  }
 
   return Napi::Number::New(env, value);
 }
@@ -21,10 +27,16 @@ Napi::Number MethodReadHumidity(const Napi::CallbackInfo& info) {
 
   double value;
   IOWSHT7x sht;
-  sht.open();
-  sht.read();
-  value = sht.getHumidity();
-  sht.close();
+  if(sht.open() && sht.read())
+  {
+    value = sht.getHumidity();
+    sht.close();
+  }
+  else
+  {
+    sht.close();
+    throw Napi::Error::New(env, sht.get_last_error());
+  }  
 
   return Napi::Number::New(env, value);
 }
